@@ -184,9 +184,11 @@ key_pair_exists=`aws ec2  describe-key-pairs  --output text --query 'KeyPairs' |
 if [[ -n $key_pair_exists ]]; then
         echo "key_pair $name already exists"
 else
-        aws ec2 create-key-pair --key-name $name --output text > $HOME/"$name"_keypair.pem
-        echo "created $name keypair and stored in $HOME with name "$name"_keypair.pem"
-        chmod 400 $HOME/"$name"_keypair.pem
+        aws ec2 create-key-pair --key-name $name --output text > $HOME/"$name".pem
+        echo "created $name keypair and stored in $HOME with name "$name".pem"
+        cat $HOME/"$name".pem  | awk -F "$name" '{print $1}' | sed '1d' | sed '1 i\-----BEGIN RSA PRIVATE KEY-----' > $HOME/"$name".pem_temp
+        mv $HOME/"$name".pem_temp $HOME/"$name".pem
+        chmod 400 $HOME/"$name".pem
 fi
 
 echo "..................................................."
@@ -203,6 +205,14 @@ if [[ $? -eq 0 ]]; then
         for i in $inst_id;
         do
                 name $i machine
+                pub_ip=`aws ec2 describe-instances --instance-ids $i --query 'Reservations[].Instances[].PublicIpAddress' --output text`
+                echo "public ip : ${pub_ip}"
+                pub_dns=`aws ec2 describe-instances --instance-ids $i --query 'Reservations[].Instances[].PublicDnsName' --output text`
+                echo "public dns : ${pub_dns}"
+                pri_ip=`aws ec2 describe-instances --instance-ids $i --query 'Reservations[].Instances[].PrivateIpAddress'  --output text`
+                echo "private ip : ${pri_ip}"
+                pri_dns=`aws ec2 describe-instances --instance-ids $i --query 'Reservations[].Instances[].PrivateDnsName'  --output text`
+                echo "private dns : ${pri_dns}"
         done
 else
         echo "some problem creating instance"
