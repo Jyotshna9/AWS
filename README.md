@@ -10,6 +10,8 @@ SUBNET_PUBLIC_NAME=10.0.1.0 - us-east-1a
 destinationCidrBlock=0.0.0.0/0
 count=1                                           # no of ec2 instances to be launched
 instance-type=t2.micro                            # type of ec2 instance to be launched
+aws_access_key_id=xxxxxxx
+aws_secret_access_key=yyyyyyyyyyyyyyyyy
 
 
 below is the sample o/p of creation of ec2 instance
