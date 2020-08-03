@@ -23,6 +23,15 @@ echo "below is aws cli version"
 aws --version
 echo "..................................................."
 
+aws_access_key_id=`grep aws_access_key_id params.txt | cut -d "=" -f2 | sed 's/^\s\+//g;s/\s\+$//g'`
+aws_secret_access_key=`grep aws_secret_access_key params.txt | cut -d "=" -f2 | sed 's/^\s\+//g;s/\s\+$//g'`
+aws_reg=`grep AWS_REGION params.txt | cut -d "=" -f2 | sed 's/^\s\+//g;s/\s\+$//g'`
+
+aws configure set aws_access_key_id $aws_access_key_id
+aws configure set aws_secret_access_key $aws_secret_access_key
+aws configure set default.region $aws_reg
+
+echo "..................................................."
 
 cidr_block=`grep VPC_CIDR params.txt | cut -d "=" -f2 | sed 's/^\s\+//g;s/\s\+$//g'`
 aws_reg=`grep AWS_REGION params.txt | cut -d "=" -f2 | sed 's/^\s\+//g;s/\s\+$//g'`
