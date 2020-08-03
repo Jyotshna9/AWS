@@ -11,11 +11,15 @@ if [[ -n "$aws_installed" ]]; then
         echo "aws cli already installed"
 else
         echo "installing aws cli"
-        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-        unzip awscliv2.zip
-        sudo ./aws/install
+        sudo apt install -y curl unzip
+        if [[ ! -f "/tmp/awscliv2.zip" ]]; then
+                curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"
+        fi
+        unzip /tmp/awscliv2.zip -d /tmp
+        sudo /tmp/aws/install
 fi
 
+echo "below is aws cli version"
 aws --version
 echo "..................................................."
 
